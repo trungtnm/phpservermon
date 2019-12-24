@@ -97,13 +97,6 @@ class ServerController extends AbstractServerController
             psm_get_lang('menu', 'server_update')
         );
 
-        $icons = array(
-            'email' => 'icon-envelope',
-            'sms' => 'icon-mobile',
-            'pushover' => 'icon-pushover',
-            'telegram' => 'icon-telegram',
-        );
-
         $servers = $this->getServers();
         $server_count = count($servers);
 
@@ -214,10 +207,11 @@ class ServerController extends AbstractServerController
                 'edit_sms_selected' => $edit_server['sms'],
                 'edit_pushover_selected' => $edit_server['pushover'],
                 'edit_telegram_selected' => $edit_server['telegram'],
+                'edit_discord_selected' => $edit_server['discord'],
             ));
         }
 
-        $notifications = array('email', 'sms', 'pushover', 'telegram');
+        $notifications = array('email', 'sms', 'pushover', 'telegram', 'discord');
         foreach ($notifications as $notification) {
             if (psm_get_conf($notification . '_status') == 0) {
                 $tpl_data['warning_' . $notification] = true;
@@ -245,7 +239,7 @@ class ServerController extends AbstractServerController
 
         // We need the server id to encrypt the password. Encryption will be done after the server is added
         $encrypted_password = '';
-        
+
         if (!empty($_POST['website_password'])) {
             $new_password = psm_POST('website_password');
 
@@ -286,6 +280,7 @@ class ServerController extends AbstractServerController
             'sms' => in_array($_POST['sms'], array('yes', 'no')) ? $_POST['sms'] : 'no',
             'pushover' => in_array($_POST['pushover'], array('yes', 'no')) ? $_POST['pushover'] : 'no',
             'telegram' => in_array($_POST['telegram'], array('yes', 'no')) ? $_POST['telegram'] : 'no',
+            'discord' => in_array($_POST['discord'], array('yes', 'no')) ? $_POST['discord'] : 'no',
         );
         // make sure websites start with http://
         if (
@@ -481,18 +476,18 @@ class ServerController extends AbstractServerController
                 'label' => $server_available['label'],
             );
         }
-                
+
         $tpl_data['last_output_truncated'] = $tpl_data['last_output'];
         $tpl_data['last_error_output_truncated'] = $tpl_data['last_error_output'];
-                
+
         if (strlen($tpl_data['last_output']) > 255) {
             $tpl_data['last_output_truncated'] = substr($tpl_data['last_output'], 0, 255) . '...';
         }
-                
+
         if (strlen($tpl_data['last_error_output']) > 255) {
             $tpl_data['last_error_output_truncated'] = substr($tpl_data['last_error_output'], 0, 255) . '...';
         }
-                
+
         return $this->twig->render('module/server/server/view.tpl.html', $tpl_data);
     }
 

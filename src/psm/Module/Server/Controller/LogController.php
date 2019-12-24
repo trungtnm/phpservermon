@@ -76,7 +76,7 @@ class LogController extends AbstractServerController
             $modal->setTitle(psm_get_lang('log', 'delete_title'));
             $modal->setMessage(psm_get_lang('log', 'delete_message'));
             $modal->setOKButtonLabel(psm_get_lang('system', 'delete'));
-            
+
             $sidebar->addButton(
                 'clear_logn',
                 psm_get_lang('log', 'clear'),
@@ -88,7 +88,7 @@ class LogController extends AbstractServerController
             );
         }
 
-        $log_types = array('status', 'email', 'sms', 'pushover', 'telegram');
+        $log_types = array('status', 'email', 'sms', 'pushover', 'telegram', 'discord');
 
         foreach ($log_types as $key) {
             $records = $this->getEntries($key);

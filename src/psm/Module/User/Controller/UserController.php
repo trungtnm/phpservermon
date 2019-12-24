@@ -161,6 +161,7 @@ class UserController extends AbstractController
             'pushover_key',
             'pushover_device',
             'telegram_id',
+            'discord_webhook_url',
             'email'
         );
 
@@ -257,6 +258,7 @@ class UserController extends AbstractController
             'pushover_key',
             'pushover_device',
             'telegram_id',
+            'discord_webhook_url',
             'email'
         );
         $clean = array();

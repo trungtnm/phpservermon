@@ -30,6 +30,7 @@ namespace psm\Module\Config\Controller;
 
 use psm\Module\AbstractController;
 use psm\Service\Database;
+use Symfony\Component\HttpFoundation\Response;
 
 class ConfigController extends AbstractController
 {
@@ -45,11 +46,13 @@ class ConfigController extends AbstractController
         'sms_status',
         'pushover_status',
         'telegram_status',
+        'discord_status',
         'log_status',
         'log_email',
         'log_sms',
         'log_pushover',
         'log_telegram',
+        'log_discord',
         'show_update',
         'combine_notifications',
     );
@@ -73,6 +76,7 @@ class ConfigController extends AbstractController
         'sms_from',
         'pushover_api_token',
         'telegram_api_token',
+        'discord_webhook_url',
     );
 
     private $default_tab = 'general';
@@ -238,6 +242,8 @@ class ConfigController extends AbstractController
                 $this->testPushover();
             } elseif (!empty($_POST['test_telegram'])) {
                 $this->testTelegram();
+            } elseif (!empty($_POST['test_discord'])) {
+                $this->testDiscord();
             }
 
             if ($language_refresh) {
@@ -375,6 +381,30 @@ class ConfigController extends AbstractController
                     $error = 'Unknown';
                 }
                 $this->addMessage(sprintf(psm_get_lang('config', 'telegram_error'), $error), 'error');
+            }
+        }
+    }
+
+    /**
+     * Execute telegram test
+     *
+     * @todo move test to separate class
+     */
+    protected function testDiscord()
+    {
+        $discord = psm_build_discord();
+        $webhookUrl = psm_get_conf('discord_webhook_url');
+
+        if (empty($webhookUrl)) {
+            $this->addMessage(psm_get_lang('config', 'discord_error_nowebhook'), 'error');
+        }  else {
+            $result = $discord->send(psm_get_lang('config', 'test_message'));
+
+            if ($result->getStatusCode() == Response::HTTP_OK || $result->getStatusCode() == Response::HTTP_NO_CONTENT) {
+                $this->addMessage(psm_get_lang('config', 'discord_sent'), 'success');
+            } else {
+                $error = $result->getBody()->getContents();
+                $this->addMessage(sprintf(psm_get_lang('config', 'discord_error'), $error . $result->getStatusCode() . " " . $result->getReasonPhrase()), 'error');
             }
         }
     }

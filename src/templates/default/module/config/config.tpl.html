@@ -27,6 +27,10 @@
                 role="tab" aria-controls="config-telegram" aria-selected="{% if telegram_active %}true{% else %}false{% endif %}">{{
                 label_tab_telegram }}</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link {{ discord_active }}" id="config-discord-tab" data-toggle="tab" href="#config-discord"
+               role="tab" aria-controls="config-discord" aria-selected="{% if discord_active %}true{% else %}false{% endif %}">Discord</a>
+        </li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
@@ -120,7 +124,7 @@
                 {{ macro.input_field("text", "sms_gateway_password", null, "sms_gateway_password", label_sms_gateway_password, sms_gateway_password, label_sms_gateway_password, "255") }}
                 <!-- sms sender number-->
                 {{ macro.input_field("text", "sms_from", null, "sms_from", label_sms_from, sms_from, "+31123456789", "255") }}
-                
+
                 {{ macro.button_test("testSms", label_test) }}
                 {{ macro.input_hidden("test_sms", "0") }}
                 {{ macro.button_save("sms_submit", label_save) }}
@@ -152,6 +156,20 @@
                 {{ macro.button_test("testTelegram", label_test) }}
                 {{ macro.input_hidden("test_telegram", "0") }}
                 {{ macro.button_save("telegram_submit",  label_save) }}
+            </fieldset>
+        </div>
+        <div class="tab-pane {{ discord_active }}" id="config-discord" role="tabpanel" aria-labelledby="config-pushover-tab">
+            <fieldset>
+                <legend>Discord Settings</legend>
+                <!-- enable discord -->
+                {{ macro.input_checkbox("discord_status", "discord_status[]", "Allow sending Discord messages", discord_status_checked) }}
+                <!-- enable discord log -->
+                {{ macro.input_checkbox("log_discord", "log_discord[]", "Log Discord messages sent by the script", log_discord_checked) }}
+                <!-- discord key -->
+                {{ macro.input_field("text", "discord_webhook_url", null, "discord_webhook_url", "Discord Webhook URL", discord_webhook_url, "Discord Webhook URL", "255", "discord_webhook_url_help", "") }}
+                {{ macro.button_test("testTelegram", label_test) }}
+                {{ macro.input_hidden("test_discord", "0") }}
+                {{ macro.button_save("discord_submit",  label_save) }}
             </fieldset>
         </div>
     </div>

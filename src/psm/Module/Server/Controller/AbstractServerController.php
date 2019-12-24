@@ -83,6 +83,7 @@ abstract class AbstractServerController extends AbstractController
 					`s`.`sms`,
 					`s`.`pushover`,
 					`s`.`telegram`,
+					`s`.`discord`,
 					`s`.`warning_threshold`,
 					`s`.`warning_threshold_counter`,
 					`s`.`timeout`,

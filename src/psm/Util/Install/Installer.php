@@ -206,6 +206,7 @@ class Installer
 				`pushover_key` varchar(255) NOT NULL,
 				`pushover_device` varchar(255) NOT NULL,
 				`telegram_id` varchar(255) NOT NULL,
+				`discord_webhook_url` varchar(255) NOT NULL,
 				`email` varchar(255) NOT NULL,
                 PRIMARY KEY (`user_id`),
                 UNIQUE KEY `unique_username` (`user_name`)
@@ -261,6 +262,7 @@ class Installer
 				`sms` enum('yes','no') NOT NULL default 'no',
 				`pushover` enum('yes','no') NOT NULL default 'yes',
 				`telegram` enum('yes','no') NOT NULL default 'yes',
+				`discord` enum('yes','no') NOT NULL default 'yes',
 			    `warning_threshold` mediumint(1) unsigned NOT NULL DEFAULT '1',
 			    `warning_threshold_counter` mediumint(1) unsigned NOT NULL DEFAULT '0',
 			    `timeout` smallint(1) unsigned NULL DEFAULT NULL,
@@ -643,7 +645,7 @@ class Installer
         $this->execSQL($queries);
         $this->log('Combined notifications enabled. Check out the config page for more info.');
     }
-    
+
     /**
      * Patch for v3.4.2 release
      * Version_compare was forgotten in v3.4.1 and query failed.

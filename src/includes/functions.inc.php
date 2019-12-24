@@ -44,11 +44,11 @@ namespace {
     function psm_get_lang()
     {
         $args = func_get_args();
-    
+
         if (empty($args)) {
             return isset($GLOBALS['sm_lang']) ? $GLOBALS['sm_lang'] : $GLOBALS['sm_lang_default'];
         }
-    
+
         if (isset($GLOBALS['sm_lang'])) {
             $lang = $GLOBALS['sm_lang'];
             $not_found = false;
@@ -95,7 +95,7 @@ namespace {
             $lang_file = PSM_PATH_LANG . $lang . '.lang.php';
             file_exists($lang_file) ? require $lang_file :
             trigger_error("Translation file could not be found! Default language will be used.", E_USER_WARNING);
-        
+
             isset($sm_lang) ? $GLOBALS['sm_lang'] = $sm_lang :
             trigger_error("\$sm_lang not found in translation file! Default language will be used.", E_USER_WARNING);
             isset($sm_lang['locale']) ? setlocale(LC_TIME, $sm_lang['locale']) :
@@ -418,7 +418,7 @@ namespace {
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
         curl_setopt($ch, CURLOPT_ENCODING, '');
-    
+
         if (!empty($request_method)) {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $request_method);
         }
@@ -457,7 +457,7 @@ namespace {
 
         $result = curl_exec($ch);
         curl_close($ch);
-    
+
         if (defined('PSM_DEBUG') && PSM_DEBUG === true && psm_is_cli()) {
             echo PHP_EOL .
             '==============cURL Result for: ' . $href . '===========================================' . PHP_EOL;
@@ -636,6 +636,13 @@ namespace {
         $telegram->setToken(psm_get_conf('telegram_api_token'));
 
         return $telegram;
+    }
+
+    function psm_build_discord()
+    {
+        $discord = new \DiscordWebHookClient(psm_get_conf('discord_webhook_url'));
+
+        return $discord;
     }
 
 /**
@@ -903,7 +910,7 @@ namespace {
             ),
             "\0"
         );
-    
+
         return $decrypted;
     }
 
@@ -966,4 +973,99 @@ namespace {
             return $this->sendurl();
         }
     }
+
+    /**
+     * Class DiscordWebhook
+     */
+    class DiscordWebHookClient
+    {
+        const EMBED_COLOR_DEBUG = 10395294;
+        const EMBED_COLOR_INFO = 5025616;
+        const EMBED_COLOR_NOTICE = 6323595;
+        const EMBED_COLOR_WARNING = 16771899;
+        const EMBED_COLOR_ERROR = 16007990;
+        const EMBED_COLOR_CRITICAL = 16007990;
+        const EMBED_COLOR_ALERT = 16007990;
+        const EMBED_COLOR_EMERGENCY = 16007990;
+
+        protected $webHookUrl;
+
+        /**
+         * @var \GuzzleHttp\Client
+         */
+        protected $client;
+
+        /** @var string */
+        protected $message;
+
+        /**
+         * DiscordHandler constructor.
+         *
+         * @param $webHookUrl
+         */
+        public function __construct($webHookUrl)
+        {
+            $this->client = new \GuzzleHttp\Client();
+            $this->webHookUrl = $webHookUrl;
+        }
+
+        /**
+         * @param string $message
+         * @param int    $color
+         *
+         * @return \Psr\Http\Message\ResponseInterface|null
+         * @throws \Exception
+         */
+        public function send($message = '', $color = self::EMBED_COLOR_CRITICAL)
+        {
+            $title = "PHPMon Alert";
+            if ($message) {
+                $this->message = $message;
+            }
+
+            return $this->sendWithEmbed($title, $this->message, $color);
+        }
+
+        public function setMessage($message)
+        {
+            $this->message = $message;
+        }
+
+        /**
+         * @param     $title
+         * @param     $message
+         * @param int $color
+         *
+         * @return \Psr\Http\Message\ResponseInterface
+         * @throws \Exception
+         */
+        public function sendWithEmbed($title, $message, $color = self::EMBED_COLOR_INFO)
+        {
+            $content = [
+                "embeds" => [
+                    [
+                        "title"       => $title,
+                        "description" => $message,
+                        "timestamp"   => (new \DateTime())->setTimezone(new \DateTimeZone('UTC'))->format('c'),
+                        "color"       => $color,
+                    ],
+                ],
+            ];
+
+            return $this->execute($content);
+        }
+
+        /**
+         * @param $content
+         *
+         * @return \Psr\Http\Message\ResponseInterface
+         */
+        protected function execute($content)
+        {
+            return $this->client->post($this->webHookUrl, [
+                'json' => $content,
+            ]);
+        }
+    }
+
 }
