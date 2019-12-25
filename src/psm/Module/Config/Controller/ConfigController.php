@@ -392,8 +392,8 @@ class ConfigController extends AbstractController
      */
     protected function testDiscord()
     {
-        $discord = psm_build_discord();
         $webhookUrl = psm_get_conf('discord_webhook_url');
+        $discord = psm_build_discord($webhookUrl);
 
         if (empty($webhookUrl)) {
             $this->addMessage(psm_get_lang('config', 'discord_error_nowebhook'), 'error');

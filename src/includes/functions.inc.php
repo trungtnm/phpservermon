@@ -638,9 +638,9 @@ namespace {
         return $telegram;
     }
 
-    function psm_build_discord()
+    function psm_build_discord($webhookUrl)
     {
-        $discord = new \DiscordWebHookClient(psm_get_conf('discord_webhook_url'));
+        $discord = new \DiscordWebHookClient($webhookUrl);
 
         return $discord;
     }

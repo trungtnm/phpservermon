@@ -588,7 +588,7 @@ class StatusNotifier
         $message = key_exists('message', $combi) ?
             $combi['message'] :
             psm_parse_msg($this->status_new, 'discord_message', $this->server);
-        $discord = psm_build_discord();
+
 
         // Log
         if (psm_get_conf('log_discord')) {
@@ -596,6 +596,7 @@ class StatusNotifier
         }
 
         foreach ($users as $user) {
+            $discord = psm_build_discord($user['discord_webhook_url']);
             // Log
             if (!empty($log_id)) {
                 psm_add_log_user($log_id, $user['user_id']);
