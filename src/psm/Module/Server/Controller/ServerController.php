@@ -208,6 +208,7 @@ class ServerController extends AbstractServerController
                 'edit_pushover_selected' => $edit_server['pushover'],
                 'edit_telegram_selected' => $edit_server['telegram'],
                 'edit_discord_selected' => $edit_server['discord'],
+                'edit_value_maintenance_time' => $edit_server['maintenance_time'],
             ));
         }
 
@@ -281,6 +282,7 @@ class ServerController extends AbstractServerController
             'pushover' => in_array($_POST['pushover'], array('yes', 'no')) ? $_POST['pushover'] : 'no',
             'telegram' => in_array($_POST['telegram'], array('yes', 'no')) ? $_POST['telegram'] : 'no',
             'discord' => in_array($_POST['discord'], array('yes', 'no')) ? $_POST['discord'] : 'no',
+            'maintenance_time' => trim(strip_tags(psm_POST('maintenance_time', ''))),
         );
         // make sure websites start with http://
         if (
