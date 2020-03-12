@@ -121,7 +121,7 @@
         </div>
         <hr>
         `,
-        createGroup: function(name, title, hosts) {
+        createGroup: function (name, title, hosts) {
             Dashboard.tabs.push({
                 name,
                 title,
@@ -137,8 +137,8 @@
 
             return content;
         },
-        renderTabContainer: function(name) {
-            return `<div role="tabpanel" class="tab-pane" id="`+ name + `"></div>`;
+        renderTabContainer: function (name) {
+            return `<div role="tabpanel" class="tab-pane" id="` + name + `"></div>`;
         },
         renderHost: function (group, host) {
             let content = Dashboard.tabContentTemplate.replace(/{{ url }}/g, host.url);
@@ -179,14 +179,15 @@
         Dashboard.createHost('https://nd-logstash.t2gcorp.com', 'Logstash'),
     ];
     let c01Hosts = [
-        Dashboard.createHost('https://nd4-c01.t2gcorp.com', 'S4',),
-        Dashboard.createHost('https://nd3-c01.t2gcorp.com', 'S3'),
-        Dashboard.createHost('https://nd2-c01.t2gcorp.com', 'S2'),
+        Dashboard.createHost('https://nd5-c01.t2gcorp.com', 'S5 Hoa Sơn',),
+        Dashboard.createHost('https://nd4-c01.t2gcorp.com', 'S4 Lương Sơn',),
+        Dashboard.createHost('https://nd3-c01.t2gcorp.com', 'S3 Phật Sơn'),
+        Dashboard.createHost('https://nd2-c01.t2gcorp.com', 'S2 Đại Thiên Sơn'),
     ];
     let c02Hosts = [
-        Dashboard.createHost('https://nd3-c02.t2gcorp.com', 'S3'),
-        Dashboard.createHost('https://nd2-c02.t2gcorp.com', 'S2'),
-        Dashboard.createHost('https://nd1-c02.t2gcorp.com', 'S1'),
+        Dashboard.createHost('https://nd4-c02.t2gcorp.com', 'S4 Chu Tiên Trấn'),
+        Dashboard.createHost('https://nd3-c02.t2gcorp.com', 'S3 Nam Nhạc Trấn'),
+        Dashboard.createHost('https://nd2-c02.t2gcorp.com', 'S2 Ba Lăng Huyện'),
     ];
     let webHosts = [
         Dashboard.createHost('https://nd-webc01.t2gcorp.com', 'Web C01'),
