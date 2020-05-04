@@ -189,6 +189,10 @@
         Dashboard.createHost('https://nd3-c02.t2gcorp.com', 'S3 Nam Nhạc Trấn'),
         Dashboard.createHost('https://nd2-c02.t2gcorp.com', 'S2 Ba Lăng Huyện'),
     ];
+    let c03Hosts = [
+        Dashboard.createHost('https://nd1-c03.t2gcorp.com', 'GS - Tàng Kiếm'),
+        Dashboard.createHost('https://wine-c03.t2gcorp.com', 'Wine'),
+    ];
     let webHosts = [
         Dashboard.createHost('https://nd-webc01.t2gcorp.com', 'Web C01'),
         Dashboard.createHost('https://nd-webc02.t2gcorp.com', 'Web C02'),
@@ -196,6 +200,7 @@
     Dashboard.createGroup('elk', 'ELK', devopsHosts);
     Dashboard.createGroup('c01', 'C01', c01Hosts);
     Dashboard.createGroup('c02', 'C02', c02Hosts);
+    Dashboard.createGroup('c03', 'C03', c03Hosts);
     Dashboard.createGroup('webs', 'Webs', webHosts);
     Dashboard.render();
 </script>
